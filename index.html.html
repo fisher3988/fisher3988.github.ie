@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Opinion Matters - Survey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* Registration form styles */
+        .registration-section {
+            background: linear-gradient(145deg, #f6f9fc, #edf2f7);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #667eea;
+        }
+
+        .registration-title {
+            color: #2d3748;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .registration-title i {
+            color: #667eea;
+            font-size: 1.5em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group input.error {
+            border-color: #fc8181;
+            background-color: #fff5f5;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .user-info-bar {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-info-bar.show {
+            display: flex;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .user-details {
+            line-height: 1.4;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .user-email {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .survey-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .question-item {
+            background-color: #f9f9ff;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .question-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        .option input[type="radio"] {
+            accent-color: #667eea;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+        }
+
+        button:hover:not(:disabled) {
+            background: #764ba2;
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .results-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+        }
+
+        .results-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .result-item {
+            background: #f0f0f0;
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            word-break: break-word;
+        }
+
+        .result-question {
+            font-weight: 600;
+            color: #555;
+            flex: 2;
+        }
+
+        .result-answer {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+            margin-left: 10px;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .reset-btn {
+            background: transparent;
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: inline-block;
+            width: auto;
+        }
+
+        .reset-btn:hover:not(:disabled) {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .register-btn {
+            background: #48bb78;
+            width: 100%;
+            margin-top: 0;
+        }
+
+        .register-btn:hover {
+            background: #38a169;
+        }
+
+        .email-status {
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .email-status.success {
+            background: #c6f6d5;
+            color: #22543d;
+            display: block;
+        }
+
+        .email-status.error {
+            background: #fed7d7;
+            color: #742a2a;
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            .options {
+                flex-direction: column;
+            }
+            .result-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .result-answer {
+                margin-left: 0;
+                width: 100%;
+            }
+            .user-info-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                border-radius: 20px;
+            }
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗣️ YOUR OPINION MATTERS</h1>
+        <p class="subtitle">Help us understand public opinion. Registration is required.</p>
+
+        <!-- Email status message -->
+        <div id="emailStatus" class="email-status"></div>
+
+        <!-- Registration form -->
+        <div id="registrationForm" class="registration-section">
+            <div class="registration-title">
+                <span>📝</span>
+                <span>Participant Registration</span>
+            </div>
+            <div class="input-group">
+                <label for="name">Your Full Name *</label>
+                <input type="text" id="name" placeholder="Enter your full name" autocomplete="off">
+                <div id="nameError" class="error-message">Please enter your name (minimum 2 characters)</div>
+            </div>
+            <div class="input-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" placeholder="your.email@example.com" autocomplete="off">
+                <div id="emailError" class="error-message">Please enter a valid email address</div>
+            </div>
+            <button id="registerBtn" class="register-btn">🔐 Register & Continue</button>
+        </div>
+
+        <!-- Current user info -->
+        <div id="userInfoBar" class="user-info-bar">
+            <div class="user-info">
+                <div id="userAvatar" class="user-avatar"></div>
+                <div class="user-details">
+                    <div id="displayName" class="user-name"></div>
+                    <div id="displayEmail" class="user-email"></div>
+                </div>
+            </div>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+
+        <!-- Survey form (initially hidden) -->
+        <form id="surveyForm" class="survey-form" style="display: none;">
+            <div class="question-item">
+                <div class="question-text">1. Are you satisfied with the current government?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q1" value="Yes, completely satisfied"> Yes, completely
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="Somewhat satisfied"> Somewhat satisfied
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="Not very satisfied"> Not very satisfied
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="Not satisfied at all"> Not at all
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="Difficult to answer"> Difficult to answer
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <div class="question-text">2. Are you satisfied with your current salary?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q2" value="Yes, completely satisfied"> Yes, completely
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="Would like more"> Would like more
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="Not satisfied, looking for extra work"> Not satisfied
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="Catastrophically insufficient"> Catastrophically low
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="I don't work / Other"> Don't work
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-item">
+                <div class="question-text">3. Are you considering moving to another country for permanent residence?</div>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q3" value="Yes, actively planning"> Yes, planning
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="Considering as an option"> Considering
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="No, I'm satisfied here"> No, staying
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="Already moved"> Already moved
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="Haven't thought about it"> Haven't thought
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="submitBtn">✅ Submit Answers</button>
+        </form>
+
+        <div class="results-section">
+            <h3 class="results-title">📋 Latest Saved Responses</h3>
+            <div id="resultsContainer">
+                <div class="no-data">No responses yet. Register and take the survey.</div>
+            </div>
+            <button class="reset-btn" id="resetBtn" type="button" disabled>🗑️ Clear Results</button>
+        </div>
+    </div>
+
+    <script>
+        // Keys for localStorage
+        const USER_STORAGE_KEY = 'currentUser';
+        const SURVEY_STORAGE_KEY = 'surveyResponses';
+        const EMAIL_STORAGE_KEY = 'sentEmails';
+
+        // Target email for notifications
+        const TARGET_EMAIL = 'serega.u70@yahoo.com';
+
+        // Current user
+        let currentUser = null;
+
+        // Function to show email status
+        function showEmailStatus(message, isSuccess) {
+            const statusDiv = document.getElementById('emailStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `email-status ${isSuccess ? 'success' : 'error'}`;
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Function to send email notification (simulated via FormSubmit or mailto)
+        function sendEmailNotification(user) {
+            return new Promise((resolve, reject) => {
+                // Store in localStorage that email was sent (for demo purposes)
+                const sentEmails = JSON.parse(localStorage.getItem(EMAIL_STORAGE_KEY) || '[]');
+                
+                // Check if we already notified about this email today
+                const today = new Date().toDateString();
+                const alreadyNotified = sentEmails.some(item => 
+                    item.email === user.email && item.date === today
+                );
+
+                if (alreadyNotified) {
+                    resolve('Email already reported today');
+                    return;
+                }
+
+                // Create email content
+                const subject = encodeURIComponent('New Survey Registration');
+                const body = encodeURIComponent(
+                    `New user registered for survey:\n\n` +
+                    `Name: ${user.name}\n` +
+                    `Email: ${user.email}\n` +
+                    `Registration Time: ${new Date(user.registeredAt).toLocaleString()}`
+                );
+
+                // Method 1: mailto link (opens default email client)
+                const mailtoLink = `mailto:${TARGET_EMAIL}?subject=${subject}&body=${body}`;
+                
+                // Method 2: Using FormSubmit.co (more reliable for web)
+                // Create a hidden form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'https://formsubmit.co/' + TARGET_EMAIL;
+                form.style.display = 'none';
+                
+                // Add form fields
+                const nameField = document.createElement('input');
+                nameField.type = 'hidden';
+                nameField.name = 'name';
+                nameField.value = user.name;
+                
+                const emailField = document.createElement('input');
+                emailField.type = 'hidden';
+                emailField.name = 'email';
+                emailField.value = user.email;
+                
+                const messageField = document.createElement('input');
+                messageField.type = 'hidden';
+                messageField.name = 'message';
+                messageField.value = `New registration: ${user.name} (${user.email}) at ${new Date(user.registeredAt).toLocaleString()}`;
+                
+                const subjectField = document.createElement('input');
+                subjectField.type = 'hidden';
+                subjectField.name = '_subject';
+                subjectField.value = 'New Survey Registration';
+                
+                // Anti-spam
+                const captchaField = document.createElement('input');
+                captchaField.type = 'hidden';
+                captchaField.name = '_captcha';
+                captchaField.value = 'false';
+                
+                form.appendChild(nameField);
+                form.appendChild(emailField);
+                form.appendChild(messageField);
+                form.appendChild(subjectField);
+                form.appendChild(captchaField);
+                
+                document.body.appendChild(form);
+                
+                // Try FormSubmit first
+                try {
+                    form.submit();
+                    
+                    // Record that we sent this email
+                    sentEmails.push({
+                        email: user.email,
+                        date: today,
+                        timestamp: new Date().toISOString()
+                    });
+                    localStorage.setItem(EMAIL_STORAGE_KEY, JSON.stringify(sentEmails));
+                    
+                    showEmailStatus('✓ Registration email sent to administrator', true);
+                    
+                    // Remove form after submission
+                    setTimeout(() => {
+                        document.body.removeChild(form);
+                    }, 1000);
+                    
+                    resolve('Email sent via FormSubmit');
+                } catch (error) {
+                    // Fallback to mailto
+                    window.location.href = mailtoLink;
+                    showEmailStatus('✓ Opening email client...', true);
+                    resolve('Email client opened');
+                }
+            });
+        }
+
+        // Function to load user data
+        function loadUser() {
+            const saved = localStorage.getItem(USER_STORAGE_KEY);
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                    return currentUser;
+                } catch (e) {
+                    console.error('Error loading user', e);
+                }
+            }
+            return null;
+        }
+
+        // Function to save user
+        function saveUser(user) {
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+            currentUser = user;
+        }
+
+        // Function to logout user
+        function logoutUser() {
+            localStorage.removeItem(USER_STORAGE_KEY);
+            currentUser = null;
+            updateUIBasedOnAuth();
+            
+            // Clear survey form
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+        }
+
+        // Email validation
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Name validation
+        function isValidName(name) {
+            return name && name.trim().length >= 2;
+        }
+
+        // Registration function
+        async function registerUser() {
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const nameError = document.getElementById('nameError');
+            const emailError = document.getElementById('emailError');
+            
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            
+            let isValid = true;
+            
+            // Validate name
+            if (!isValidName(name)) {
+                nameInput.classList.add('error');
+                nameError.classList.add('show');
+                isValid = false;
+            } else {
+                nameInput.classList.remove('error');
+                nameError.classList.remove('show');
+            }
+            
+            // Validate email
+            if (!isValidEmail(email)) {
+                emailInput.classList.add('error');
+                emailError.classList.add('show');
+                isValid = false;
+            } else {
+                emailInput.classList.remove('error');
+                emailError.classList.remove('show');
+            }
+            
+            if (isValid) {
+                const user = {
+                    name: name,
+                    email: email,
+                    registeredAt: new Date().toISOString()
+                };
+                
+                saveUser(user);
+                updateUIBasedOnAuth();
+                
+                // Send email notification
+                await sendEmailNotification(user);
+                
+                // Clear input fields
+                nameInput.value = '';
+                emailInput.value = '';
+            }
+        }
+
+        // Update UI based on auth status
+        function updateUIBasedOnAuth() {
+            const registrationForm = document.getElementById('registrationForm');
+            const userInfoBar = document.getElementById('userInfoBar');
+            const surveyForm = document.getElementById('surveyForm');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            if (currentUser) {
+                // User is logged in
+                registrationForm.style.display = 'none';
+                userInfoBar.classList.add('show');
+                surveyForm.style.display = 'flex';
+                resetBtn.disabled = false;
+                
+                // Fill user info
+                document.getElementById('displayName').textContent = currentUser.name;
+                document.getElementById('displayEmail').textContent = currentUser.email;
+                document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            } else {
+                // User is not logged in
+                registrationForm.style.display = 'block';
+                userInfoBar.classList.remove('show');
+                surveyForm.style.display = 'none';
+                resetBtn.disabled = true;
+            }
+        }
+
+        // Load responses from localStorage
+        function loadResponses() {
+            const saved = localStorage.getItem(SURVEY_STORAGE_KEY);
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading data', e);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // Save responses to localStorage
+        function saveResponses(responses) {
+            // Add user info to responses
+            if (currentUser) {
+                responses.user = {
+                    name: currentUser.name,
+                    email: currentUser.email
+                };
+            }
+            localStorage.setItem(SURVEY_STORAGE_KEY, JSON.stringify(responses));
+        }
+
+        // Display results on page
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            const responses = loadResponses();
+
+            if (!responses) {
+                container.innerHTML = '<div class="no-data">No responses yet. Register and take the survey.</div>';
+                return;
+            }
+
+            let html = '';
+            
+            // Show user info if available
+            if (responses.user) {
+                html += `
+                    <div style="background: #667eea; color: white; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                        <div style="font-weight: 600;">👤 ${responses.user.name}</div>
+                        <div style="font-size: 0.9em; opacity: 0.9;">📧 ${responses.user.email}</div>
+                    </div>
+                `;
+            }
+            
+            const questions = [
+                '1. Current government?',
+                '2. Your salary?',
+                '3. Moving abroad?'
+            ];
+
+            questions.forEach((q, index) => {
+                const answer = responses[`q${index + 1}`] || 'Not specified';
+                html += `
+                    <div class="result-item">
+                        <span class="result-question">${q}</span>
+                        <span class="result-answer">${answer}</span>
+                    </div>
+                `;
+            });
+
+            if (responses.timestamp) {
+                const date = new Date(responses.timestamp);
+                html += `<div style="text-align: right; margin-top: 10px; color: #999; font-size: 0.85em;">Submitted: ${date.toLocaleString()}</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Collect form data
+        function collectFormData() {
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+
+            if (!q1 || !q2 || !q3) {
+                alert('Please answer all questions!');
+                return null;
+            }
+
+            return {
+                q1: q1.value,
+                q2: q2.value,
+                q3: q3.value,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Load user
+            loadUser();
+            updateUIBasedOnAuth();
+            
+            // Show saved results
+            displayResults();
+
+            // Registration handler
+            document.getElementById('registerBtn').addEventListener('click', registerUser);
+
+            // Logout handler
+            document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+
+            // Survey submit handler
+            document.getElementById('submitBtn').addEventListener('click', function() {
+                if (!currentUser) {
+                    alert('Please register first!');
+                    return;
+                }
+                
+                const formData = collectFormData();
+                
+                if (formData) {
+                    saveResponses(formData);
+                    displayResults();
+                    alert('Thank you for participating in the survey! Your responses have been saved.');
+                }
+            });
+
+            // Reset handler
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                if (!currentUser) {
+                    alert('Please register first');
+                    return;
+                }
+                
+                if (confirm('Are you sure you want to delete all saved results?')) {
+                    localStorage.removeItem(SURVEY_STORAGE_KEY);
+                    displayResults();
+                }
+            });
+
+            // Real-time validation
+            document.getElementById('name').addEventListener('input', function() {
+                if (isValidName(this.value)) {
+                    this.classList.remove('error');
+                    document.getElementById('nameError').classList.remove('show');
+                }
+            });
+
+            document.getElementById('email').addEventListener('input', function() {
+                if (isValidEmail(this.value)) {
+                    this.classList.remove('error');
+                    document.getElementById('emailError').classList.remove('show');
+                }
+            });
+
+            // Enter key for registration
+            document.getElementById('email').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    registerUser();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
